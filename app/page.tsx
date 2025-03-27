@@ -48,12 +48,6 @@ Return only the 3 questions, one per line.`;
   }
 }
 
-
-
-
-
-
-
 export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
@@ -68,9 +62,41 @@ export default function Home() {
 
   const [files, setFiles] = useState<File[] | null>(null)
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([])
+  const [dragActive, setDragActive] = useState<boolean>(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const inputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Handle drag events
+  const handleDrag = (e: React.DragEvent<HTMLFormElement | HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  // Handle drop event
+  const handleDrop = (e: React.DragEvent<HTMLFormElement | HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setFiles(Array.from(e.dataTransfer.files));
+    }
+  };
+
+  // Handle regular file input change
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(Array.from(e.target.files));
+    }
+  };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,6 +104,7 @@ export default function Home() {
     if (files && files.length > 0) {
       let attachments: Attachment[] = [];
       let filesProcessed = 0;
+      const currentFileNames = files.map(file => file.name);
 
       files.forEach(file => {
         const reader = new FileReader();
@@ -88,20 +115,31 @@ export default function Home() {
             contentType: file.type,
             url: reader.result as string
           });
+
           
           filesProcessed++;
           
           if (filesProcessed === files.length) {
-            handleSubmit(e, {
-              experimental_attachments: attachments
-            });
-
-            setFiles(null);
-            fileInputRef.current && (fileInputRef.current.value = "");
+            // console.log("fileNames", currentFileNames);
+            
+            const fileNamesText = currentFileNames.join(" ");
+            const modifiedInput = fileNamesText + "\n" + input;
+            
+            handleInputChange({ 
+              target: { value: modifiedInput } 
+            } as React.ChangeEvent<HTMLInputElement>);
+            
+            setTimeout(() => {
+              handleSubmit(e, {
+                experimental_attachments: attachments,
+              });
+              
+              setFiles(null);
+              fileInputRef.current && (fileInputRef.current.value = "");
+            }, 0);
           }
         };
         
-        // Start reading the file
         reader.readAsDataURL(file);
       });
     } else {
@@ -117,34 +155,66 @@ export default function Home() {
     }
   }
 
-
   return (
     <main className="p-4 max-w-4xl mx-auto text-black">
       <div className="mb-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`p-2 rounded ${message.role === "user" ? "bg-gray-300" : "bg-gray-100"
-              } max-w-[80%] ${message.role === "user" ? "ml-auto" : "mr-auto"}`}
-          >
-            {message.role === "user" ? (
-              message.content
-            ) : (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
-            )}
-          </div>
-        ))}
+        {messages.map((message) => {
+          if (message.role === "user") {
+            return (
+              <div
+                key={message.id}
+                className="p-2 rounded bg-gray-300 max-w-[80%] ml-auto"
+              >
+                <p>{files}</p>
+                <p>{message.content}</p>
+              </div>
+            )
+          } else {
+            return (
+              <div
+                key={message.id}
+                className="p-2 rounded bg-gray-100 max-w-[80%] mr-auto"
+              >
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+              </div>
+            )
+          }
+        })}
+
+
       </div>
 
-      <form onSubmit={handleFormSubmit} className="flex flex-col gap-2 mt-4">
-        <input
-          ref={fileInputRef}
-          type="file"
-          onChange={(e) => setFiles(e.target.files ? Array.from(e.target.files) : null)}
-          className="mb-2"
-          accept="image/*,.pdf"
-          multiple
-        />
+      <form 
+        ref={formRef}
+        onSubmit={handleFormSubmit} 
+        className="flex flex-col gap-2 mt-4"
+        onDragEnter={handleDrag}
+      >
+        <div 
+          className={`p-4 border-2 rounded-lg text-center cursor-pointer transition-colors ${
+            dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
+          }`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <p className="mb-2">Drag & drop files here or click to select</p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/*,.pdf"
+            multiple
+          />
+          {files && files.length > 0 && (
+            <p className="text-sm mt-1">
+              Files selected: {files.map(f => f.name).join(", ")}
+            </p>
+          )}
+        </div>
 
         <div className="flex gap-2">
           <input
@@ -158,13 +228,6 @@ export default function Home() {
             Send
           </button>
         </div>
-
-        {files && files.length > 0 && (
-          <p className="text-sm mt-1">
-            Files selected: {files.map(f => f.name).join(", ")}
-          </p>
-        )}
-
       </form>
 
       {suggestedQuestions.length > 0 && (
