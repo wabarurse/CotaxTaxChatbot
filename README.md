@@ -5,7 +5,7 @@ A web-based chatbot that acts as a tax assistant. This application lets users as
 ## Features ✨
 
 - **Conversational Interface:**  
-  Uses the Vercel AI SDK’s `useChat` hook to create a chat UI that displays messages in styled chat bubbles.
+  Uses the Vercel AI SDK’s useChat hook to create a chat UI that displays messages in styled chat bubbles.
 
 - **File Upload Capability:**  
   Drag-and-drop or click-to-select file uploads. The app extracts file names and prepends them to the user’s message input.
@@ -22,11 +22,11 @@ A web-based chatbot that acts as a tax assistant. This application lets users as
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **AI Integration:** [Vercel AI SDK](https://sdk.vercel.ai/)
 
-## Getting Started 🏁
-**Check out the website here!** [Link](https://richard-huang-taxbot.vercel.app/)
+## Check out the website here! [Link](https://richard-huang-taxbot.vercel.app/)
 
 
-**How to run this program locally:**
-    - **1.** create a `.env.local` and inside add `OPENAI_API_KEY=XXXXXX` and replace XXXXXX with your open ai api key
-    - **2.** run: `npm i`
-    - **3.** run: `npm run dev`
+## Running Locally
+- **1.** create a .env.local and inside add OPENAI_API_KEY=XXXXXX and replace XXXXXX with your open ai api key
+- **2.** run: npm i
+- **3.** run: npm run dev
+
