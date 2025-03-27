@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tax Assistant Chatbot 🚀 - Richard Huang
 
-## Getting Started
+A web-based chatbot that acts as a tax assistant. This application lets users ask tax-related questions and upload files (like PDFs or images) to support their queries. It uses the Vercel AI SDK for conversational AI, offering a responsive and interactive chat interface built with Next.js and styled with Tailwind CSS.
 
-First, run the development server:
+## Features ✨
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Conversational Interface:**  
+  Uses the Vercel AI SDK’s `useChat` hook to create a chat UI that displays messages in styled chat bubbles.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **File Upload Capability:**  
+  Drag-and-drop or click-to-select file uploads. The app extracts file names and prepends them to the user’s message input.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Quick Follow-Up Suggestions:**  
+  Generates natural follow-up questions based on AI responses to keep the conversation flowing.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Responsive Design:**  
+  Built with Tailwind CSS for a clean, user-friendly interface across devices.
 
-## Learn More
+## Tech Stack 🛠️
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend:** [Next.js](https://nextjs.org/) (React framework)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **AI Integration:** [Vercel AI SDK](https://sdk.vercel.ai/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Getting Started 🏁
+**Check out the website here!** [Link](https://richard-huang-taxbot.vercel.app/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**How to run this program locally:**
+    - **1.** create a `.env.local` and inside add `OPENAI_API_KEY=XXXXXX` and replace XXXXXX with your open ai api key
+    - **2.** run: `npm i`
+    - **3.** run: `npm run dev`
