@@ -28,7 +28,7 @@ export default function Home() {
   const formRef = useRef<HTMLFormElement>(null)
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(["introduce yourself"])
 
-  const { files, dragActive, fileInputRef, handleDrag, handleDrop, handleFileChange, clearFiles } = useFileHandling()
+  const { files, dragActive, fileInputRef, handleDrag, handleDrop, handleFileChange, handleRemoveFile, clearFiles } = useFileHandling()
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
@@ -143,13 +143,24 @@ export default function Home() {
                       fileInputRef={fileInputRef}
                       handleFileChange={handleFileChange}
                       files={files}
+                      onRemoveFile={handleRemoveFile}
                     />
                   ) : null}
 
                   <div className="flex gap-2 items-center">
                     <button
                       type="button"
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => {
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = "";
+                          if (files && files.length > 0) {
+                            fileInputRef.current.setAttribute('data-mode', 'append');
+                          } else {
+                            fileInputRef.current.removeAttribute('data-mode');
+                          }
+                          fileInputRef.current.click();
+                        }
+                      }}
                       className="text-gray-500 hover:text-[#3D54A0] transition-colors"
                     >
                       <svg
@@ -166,14 +177,6 @@ export default function Home() {
                           d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
                         />
                       </svg>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        onChange={handleFileChange}
-                        className="hidden"
-                        accept="image/*,.pdf"
-                        multiple
-                      />
                     </button>
 
                     <input
@@ -198,6 +201,15 @@ export default function Home() {
                       </svg>
                     </motion.button>
                   </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    accept="image/*,.pdf"
+                    multiple
+                  />
                 </form>
 
                 <FollowUpQuestions questions={suggestedQuestions} onQuestionClick={handleSuggestedQuestionClick} />
