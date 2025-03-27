@@ -1,4 +1,4 @@
-# Tax Assistant Chatbot 🚀 - Richard Huang
+# Tax Assistant Chatbot 🧾 - Richard Huang
 
 A web-based chatbot that acts as a tax assistant. This application lets users ask tax-related questions and upload files (like PDFs or images) to support their queries. It uses the Vercel AI SDK for conversational AI, offering a responsive and interactive chat interface built with Next.js and styled with Tailwind CSS.
 
@@ -22,11 +22,14 @@ A web-based chatbot that acts as a tax assistant. This application lets users as
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **AI Integration:** [Vercel AI SDK](https://sdk.vercel.ai/)
 
-## Check out the website here! [Link](https://richard-huang-taxbot.vercel.app/)
+## Check out the website here!❗️[Link](https://richard-huang-taxbot.vercel.app/)
 
-
-## Running Locally
+## Running Locally 💻
 - **1.** create a .env.local and inside add OPENAI_API_KEY=XXXXXX and replace XXXXXX with your open ai api key
 - **2.** run: npm i
 - **3.** run: npm run dev
 
+## Next Steps 🚀
+- **More UI/UX enhancements:** The UI can look better, right now its very simple
+- **User Login:** Users should be able to sign up and be remembered (using NextAuth.js)
+- **Past Chats:** Each user should have their past conversations stored in a database
