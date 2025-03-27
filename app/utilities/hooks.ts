@@ -4,7 +4,7 @@ import { useState, useRef } from "react"
 function useFileHandling() {
   const [files, setFiles] = useState<File[] | null>(null)
   const [dragActive, setDragActive] = useState<boolean>(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>
 
   const handleDrag = (e: React.DragEvent<HTMLFormElement | HTMLDivElement>) => {
     e.preventDefault()
